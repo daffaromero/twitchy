@@ -10,12 +10,12 @@ const font = Poppins({
 export const Logo = () => {
   return (
     <div className='flex flex-col  items-center gap-y-4'>
-      <div className='bg-white rounded-full p-0.5'>
+      <div className='bg-purple-400 rounded-full'>
         <img
           src='/Bethere.svg'
           alt='Streamovision'
-          height={80}
-          width={80}
+          height={120}
+          width={120}
         ></img>
       </div>
       <div className={cn("flex flex-col items-center", font.className)}>

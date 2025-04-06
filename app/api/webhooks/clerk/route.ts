@@ -61,6 +61,61 @@ export async function POST(req: Request) {
     });
   }
 
+  if (eventType === "user.updated") {
+    const currUser = await db.user.findUnique({
+      where: {
+        externaluserId: payload.data.id,
+      },
+    });
+
+    if (!currUser) {
+      return new Response("Error: User not found", {
+        status: 404,
+      });
+    }
+
+    await db.user.update({
+      where: {
+        externaluserId: payload.data.id,
+      },
+      data: {
+        username: payload.data.username,
+        email: payload.data.email_addresses[0].email_address,
+        imageUrl: payload.data.profile_image_url,
+      },
+    });
+
+    console.log("User updated:", payload.data.id);
+    return new Response("User updated", {
+      status: 200,
+    });
+  }
+
+  if (eventType === "user.deleted") {
+    const currUser = await db.user.findUnique({
+      where: {
+        externaluserId: payload.data.id,
+      },
+    });
+
+    if (!currUser) {
+      return new Response("Error: User not found", {
+        status: 404,
+      });
+    }
+
+    await db.user.delete({
+      where: {
+        externaluserId: payload.data.id,
+      },
+    });
+
+    console.log("User deleted:", payload.data.id);
+    return new Response("User deleted", {
+      status: 200,
+    });
+  }
+
   console.log("Webhook event:", eventType, payload.data);
 
   return new Response("Webhook received", { status: 200 });
